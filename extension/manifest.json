@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
 
-  "name" : "Emoji Translate",
-  "description" : "Translates english words into magical emoji characters",
-  "version" : "1.0.3",
+  "name" : "XKCD Translate",
+  "description" : "Based on XKCD Comic #1625",
+  "version" : "1.0.0",
 
   "permissions": [
     "activeTab"
@@ -14,7 +14,7 @@
   },
 
   "web_accessible_resources": [
-    "emojis.json"
+    "map.json"
   ],
 
   "background": {
@@ -24,6 +24,6 @@
 
   "browser_action": {
     "default_icon": "logo.png",
-    "default_title" : "Translate to emoji!"
+    "default_title" : "XKCD translate!"
   }
 }

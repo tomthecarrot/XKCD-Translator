@@ -1,12 +1,12 @@
-var allEmojis;
+var map;
 var SYMBOLS = '!"#$%&\'()*+,-./:;<=>?@[]^_`{|}~';
 
 (function() {
   var request = new XMLHttpRequest();
-  request.open('GET', chrome.extension.getURL('/emojis.json'), true);
+  request.open('GET', chrome.extension.getURL('/map.json'), true);
   request.onload = function() {
     if (request.status >= 200 && request.status < 400) {
-      allEmojis = JSON.parse(request.response);
+      map = JSON.parse(request.response);
       translateAllTheThings();
     }
   };
@@ -61,14 +61,10 @@ function translateWord(word) {
     word = word.slice(0, word.length - 1);
   }
 
-  var emoji = getMeAnEmoji(word);
-  if (emoji != '') {
+  var replacement = getReplacement(word);
+  if (replacement != '') {
     node.title = word;
-    // Emoji in bold text isn't rendered in Chrome :sob:
-    node.style.fontWeight = 'normal';
-    node.style.fontFamily = 'AppleColorEmoji';
-    node.style.letterSpacing = '0.1em';
-    node.innerHTML = emoji;
+    node.innerHTML = replacement;
   } else {
     node.innerHTML = word;
   }
@@ -78,7 +74,7 @@ function translateWord(word) {
   return node;
 }
 
-function getMeAnEmoji(keyword) {
+function getReplacement(keyword) {
   keyword = keyword.trim().toLowerCase();
 
   if (!keyword || keyword === '' || keyword === 'it')
@@ -94,13 +90,10 @@ function getMeAnEmoji(keyword) {
   var maybePlural = (keyword.length == 1) ? '' : keyword + 's';
 
   // Go through all the things and find the first one that matches.
-  for (var emoji in allEmojis) {
-    var keywords = allEmojis[emoji].keywords;
-    if (emoji == keyword || emoji == maybeSingular || emoji == maybePlural ||
-        (keywords && keywords.indexOf(keyword) >= 0) ||
-        (keywords && keywords.indexOf(maybeSingular) >= 0) ||
-        (keywords && keywords.indexOf(maybePlural) >= 0))
-      return allEmojis[emoji].char;
+  for (var replacement in map) {
+    if (replacement == keyword || replacement == maybeSingular || replacement == maybePlural) {
+    	return map[replacement];
+    }
   }
   return '';
 };
